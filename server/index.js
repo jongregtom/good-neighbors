@@ -15,16 +15,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //   });
 
 if (process.env.NODE_ENV === "production") {
-    app.use(express.static(path.join(__dirname, 'client/build')));
+    app.use(express.static(path.join(__dirname, '/../build')));
     // Handle React routing, return all requests to React app
     app.get('/*', function(req, res) {
-        res.sendFile(path.join(__dirname, 'client/build', 'index.html'));
+        res.sendFile(path.join(__dirname, '/../build', 'index.html'));
     });
 }
 
 app.get('/check', (req, res, next) => {
     res.send('hi');
-    console.log('hi')
+    console.log(path.join(__dirname, '/../build'))
     next();
 })
 
