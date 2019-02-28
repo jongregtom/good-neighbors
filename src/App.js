@@ -4,23 +4,24 @@ import auth0Client from './Auth';
 import Callback from './Callback';
 import NavBar from './Components/NavBar';
 import Feed from './Components/Feed';
-import Request from './Components/Request';
+import { requests } from './dummyData';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      userName: 'user'
+      userName: '',
+      feed: [{userName: 'Jon', title: 'title', message: 'messgage', email: 'jon@jon.com'}, {userName: 'Jon', title: 'title2', message: 'messgage2', email: 'jon@jon.com'}]
     }
     this.signIn = this.signIn.bind(this);
   }
 
   componentDidMount() {
-
+    this.setState({feed: requests})
   }
 
-  componentDidUpdate(d) {
-    if (this.state.userName === 'user') {
+  componentDidUpdate() {
+    if (this.state.userName === '' && auth0Client.isAuthenticated()) {
       this.setState({userName: auth0Client.getProfile().name})
     }
   }
@@ -37,18 +38,17 @@ class App extends Component {
     return (
       <div>
         {
-            !auth0Client.isAuthenticated() &&
-            <button className="btn btn-dark" onClick={auth0Client.signIn}>Sign In</button>
+            auth0Client.isAuthenticated() &&
+            <button onClick={auth0Client.signIn}>Sign In</button>
         }
         {
-            auth0Client.isAuthenticated() &&
+            !auth0Client.isAuthenticated() &&
             <div>
-                <label className="mr-2 text-white">{`Welcome, ${this.state.userName}`}</label>
-                <NavBar />
-                <Request userName={this.state.userName} request={"REQUEST"}/>
+              <label>{`Welcome, ${this.state.userName}`}</label>
+              <NavBar />
+              <Feed feed={this.state.feed}/>
             </div>
         }
-        <Route exact path='/' component={Feed}/>
         <Route exact path='/callback' component={Callback}/>
       </div>
     );

@@ -1,14 +1,15 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-class Request extends Component {
-    render() {
-        return (
-            <div>
-                <label>{this.props.userName || "user name"}</label>
-                <label>{this.props.request || "request"}</label>
-            </div>
-        )
-    }
+const Request = function(props) {
+
+    return (
+        <div>
+            {props.request.userName || ""} <br/>
+            {props.request.title || "no title"} <br/>
+            {props.request.message || "no message"} <br/>
+        </div>
+    )
+
 }
 
 export default Request;

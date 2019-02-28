@@ -1,9 +1,12 @@
 import React from 'react';
+import Request from './Request';
 
 const Feed = function(props) {
     return (
         <div>
-            feed.
+            <ul>
+            {props.feed.map((request, index) => <Request key={index} request={request} />)}
+            </ul>
         </div>
     )
 }
