@@ -3,18 +3,14 @@ var bodyParser = require('body-parser');
 const path = require('path');
 const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
+const graphqlHTTP = require('express-graphql');
+const { buildSchema } = require('graphql');
 
 var app = express();
 const port = process.env.PORT || 8080;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
-// app.use(function(req, res, next) {
-//     res.header("Access-Control-Allow-Origin", "*");
-//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-//     next();
-//   });
 
 const checkJwt = jwt({
     secret: jwksRsa.expressJwtSecret({
@@ -28,8 +24,9 @@ const checkJwt = jwt({
     audience: 'A02LrzuM7sqbnPmk4XFqG5-b94mK>',
     issuer: `https://good-neighbors.auth0.com/`,
     algorithms: ['RS256']
-  });
+});
 
+//serve React build file only in production
 if (process.env.NODE_ENV === "production") {
     app.use(express.static(path.join(__dirname, '/../build')));
     // Handle React routing, return all requests to React app
@@ -38,10 +35,49 @@ if (process.env.NODE_ENV === "production") {
     });
 }
 
-app.get('/check', (req, res, next) => {
-    res.send('hi');
-    next();
-})
+var schema = buildSchema(`
+  type Query {
+    hello: String,
+    getDie(numSides: Int): RandomDie
+  }
+  type RandomDie {
+    numSides: Int!
+    rollOnce: Int!
+    roll(numRolls: Int!): [Int]
+  }
+`);
+
+class RandomDie {
+    constructor(numSides) {
+      this.numSides = numSides;
+    }
+  
+    rollOnce() {
+      return 1 + Math.floor(Math.random() * this.numSides);
+    }
+  
+    roll({numRolls}) {
+      var output = [];
+      for (var i = 0; i < numRolls; i++) {
+        output.push(this.rollOnce());
+      }
+      return output;
+    }
+}
+var root = {
+    hello: () => {
+      return 'Hello world!';
+    },
+    getDie: function ({numSides}) {
+        return new RandomDie(numSides || 6);
+      }
+};
+
+app.use('/graphql', graphqlHTTP({
+    schema: schema,
+    rootValue: root,
+    graphiql: true,
+  }));
 
 
 app.listen(port, function() {

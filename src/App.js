@@ -5,8 +5,9 @@ import Callback from './Callback';
 import NavBar from './Components/NavBar';
 import Feed from './Components/Feed';
 import Location from './Components/Location';
+import LandingPage from './Components/LandingPage';
 import { requests } from './dummyData';
-const API_KEY = 'AIzaSyBrvCMnxwpFRqVhsUGyYA_YSyuZProgabU';
+import places from 'places.js';
 
 class App extends Component {
   constructor(props) {
@@ -18,24 +19,41 @@ class App extends Component {
       value: ''
     }
     this.signIn = this.signIn.bind(this);
-    this.handleLocationChange = this.handleLocationChange.bind(this);
-    this.handleLocationSubmit = this.handleLocationSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  componentWillMount() {
   }
 
   componentDidMount() {
+    //get current request when page loads
     this.setState({feed: requests});
     
-    fetch(`https://maps.googleapis.com/maps/api/place/autocomplete/json?input=paris&key=${API_KEY}`, {
+    //for Location component, uses places.js to autocomplete cities
+    var placesAutoComplete = places({
+      appId: 'plAIVCRMEQI2',
+      apiKey: '8c6f78c9fb0d763eb44acdddc3dbbf19',
+      container: document.querySelector('.search-input')
+    }).configure({
+      type: 'city'
+    });
+    //set location state to value selected
+    placesAutoComplete.on('change', e => this.setState({location: e.suggestion.value, value: ''}))
+
+    fetch('/graphql', {
+      method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type':  'application/json',
+        'Accept': 'application/json' 
       },
-      mode: 'no-cors'
-    })//.then(res => res.json())
-    .then(res => console.log(res))
-    .catch(err => console.log('error:', err));
+      body: JSON.stringify({query: "{ hello }"})
+    })
+      .then(r => r.json())
+      .then(res => console.log(res))
   }
 
   componentDidUpdate() {
+    //get user name if not already received
     if (this.state.userName === '' && auth0Client.isAuthenticated()) {
       this.setState({userName: auth0Client.getProfile().name})
     }
@@ -49,33 +67,27 @@ class App extends Component {
     return auth0Client.getProfile().name;
   }
 
-  handleLocationChange(e) {
+  handleChange(e) {
     this.setState({value: e.target.value})
   }
 
-  handleLocationSubmit(e) {
-    e.preventDefault();
-    this.setState({location: this.state.value});
-    console.log(this.state.location)
-  
-  }
-
   render() {
+    //below commented out for development
+    // if (!auth0Client.isAuthenticated()) {
+    //   return (
+    //     <div>
+    //        <LandingPage />
+    //     </div>
+    //   )
+    // }
     return (
       <div>
-        {
-            auth0Client.isAuthenticated() &&
-            <button onClick={auth0Client.signIn}>Sign In</button>
-        }
-        {
-            !auth0Client.isAuthenticated() &&
-            <div>
-              <label>{`Welcome, ${this.state.userName}`}</label>
-              <NavBar />
-              <Location location={this.state.location} handleSubmit={this.handleLocationSubmit} handleChange={this.handleLocationChange}/>
-              <Feed feed={this.state.feed}/>
-            </div>
-        }
+        <div>
+          <label>{`Welcome, ${this.state.userName}`}</label>
+          <NavBar />
+          <Location location={this.state.location} value={this.state.value} handleChange={this.handleChange} />
+          <Feed feed={this.state.feed}/>
+        </div>
         <Route exact path='/callback' component={Callback}/>
       </div>
     );
