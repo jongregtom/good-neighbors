@@ -5,10 +5,13 @@ const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
 const graphqlHTTP = require('express-graphql');
 const { buildSchema } = require('graphql');
+const cors = require('cors');
+const { addUserToDB } = require('../database/index.js');
 
 var app = express();
 const port = process.env.PORT || 8080;
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -35,50 +38,57 @@ if (process.env.NODE_ENV === "production") {
     });
 }
 
+//graphQL Schema
 var schema = buildSchema(`
-  type Query {
-    hello: String,
-    getDie(numSides: Int): RandomDie
+  input UserInput {
+    id: String
+    name: String
+    picture: String
+    email: String
+    firstName: String
   }
-  type RandomDie {
-    numSides: Int!
-    rollOnce: Int!
-    roll(numRolls: Int!): [Int]
+  type User {
+    id: String
+    name: String
+    picture: String
+    email: String
+    firstName: String
+  }
+  type Query {
+    hello: String
+  }
+  type Mutation {
+    addUser(input: UserInput): User
   }
 `);
 
-class RandomDie {
-    constructor(numSides) {
-      this.numSides = numSides;
-    }
-  
-    rollOnce() {
-      return 1 + Math.floor(Math.random() * this.numSides);
-    }
-  
-    roll({numRolls}) {
-      var output = [];
-      for (var i = 0; i < numRolls; i++) {
-        output.push(this.rollOnce());
-      }
-      return output;
+class User {
+    constructor({id, name, email, picture, firstName}) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.picture = picture;
+        this.firstName = firstName;
     }
 }
+
 var root = {
-    hello: () => {
-      return 'Hello world!';
-    },
-    getDie: function ({numSides}) {
-        return new RandomDie(numSides || 6);
-      }
+    addUser: ({input}) => {
+      return new Promise((resolve, reject) => {
+
+        addUserToDB(input, (res) => {
+            resolve(res.dataValues)
+        })
+      })
+      .then((result) => new User(result))
+    }
 };
 
-app.use('/graphql', graphqlHTTP({
+app.use('/graphql', bodyParser.json(), graphqlHTTP({
     schema: schema,
     rootValue: root,
     graphiql: true,
-  }));
-
+}));
 
 app.listen(port, function() {
     console.log(`listening on port ${port}!`);

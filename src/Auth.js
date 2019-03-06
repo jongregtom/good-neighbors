@@ -8,7 +8,7 @@ class Auth {
       clientID: 'A02LrzuM7sqbnPmk4XFqG5-b94mKu0Nq',
       redirectUri: 'http://localhost:3000/callback',
       responseType: 'id_token',
-      scope: 'openid profile'
+      scope: 'openid email profile'
     });
 
     this.getProfile = this.getProfile.bind(this);

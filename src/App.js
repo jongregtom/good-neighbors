@@ -5,7 +5,7 @@ import Callback from './Callback';
 import NavBar from './Components/NavBar';
 import Feed from './Components/Feed';
 import Location from './Components/Location';
-import LandingPage from './Components/LandingPage';
+//import LandingPage from './Components/LandingPage';
 import { requests } from './dummyData';
 import places from 'places.js';
 
@@ -13,13 +13,14 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      userName: '',
+      user: null,
       feed: [],
       location: '',
       value: ''
     }
     this.signIn = this.signIn.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.addUser = this.addUser.bind(this);
   }
 
   componentWillMount() {
@@ -39,23 +40,15 @@ class App extends Component {
     });
     //set location state to value selected
     placesAutoComplete.on('change', e => this.setState({location: e.suggestion.value, value: ''}))
-
-    fetch('/graphql', {
-      method: 'POST',
-      headers: {
-        'Content-Type':  'application/json',
-        'Accept': 'application/json' 
-      },
-      body: JSON.stringify({query: "{ hello }"})
-    })
-      .then(r => r.json())
-      .then(res => console.log(res))
   }
 
   componentDidUpdate() {
-    //get user name if not already received
-    if (this.state.userName === '' && auth0Client.isAuthenticated()) {
-      this.setState({userName: auth0Client.getProfile().name})
+    //get user info from sign in
+    if (this.state.user === null && auth0Client.isAuthenticated()) {
+      this.setState({user: auth0Client.getProfile()}, () => {
+        this.addUser(this.state.user);
+      })
+
     }
   }
   
@@ -71,6 +64,38 @@ class App extends Component {
     this.setState({value: e.target.value})
   }
 
+  addUser(user) {
+    let id = user.aud, name = user.name || user.nickname, email = user.email, picture = user.picture || null, firstName = user.given_name || user.nickname; 
+    var query = `mutation addUser($input: UserInput) {
+      addUser(input: $input) {
+        id
+        name
+      }
+    }`;
+    
+    fetch('http://localhost:8080/graphql', {
+      method: 'POST',
+      headers: {
+        'Content-Type':  'application/json',
+        'Accept': 'application/json' 
+      },
+      body: JSON.stringify({
+        query,
+        variables: {
+          input: {
+            id, 
+            name, 
+            email, 
+            picture, 
+            firstName
+          }
+        }
+      })
+    })
+      .then(r => r.json())
+      .then(res => console.log('data returned', res))
+  }
+
   render() {
     //below commented out for development
     // if (!auth0Client.isAuthenticated()) {
@@ -83,7 +108,6 @@ class App extends Component {
     return (
       <div>
         <div>
-          <label>{`Welcome, ${this.state.userName}`}</label>
           <NavBar />
           <Location location={this.state.location} value={this.state.value} handleChange={this.handleChange} />
           <Feed feed={this.state.feed}/>
