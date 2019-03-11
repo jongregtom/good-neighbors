@@ -30,29 +30,58 @@ sequelize
     }
   })
 
-  //add user to DB if doesn't already exist
-  let addUserToDB = (user, callback) => {
-    User.sync().then(() => {
-    // Table created
-        User.findOrCreate({where: {id: user.id}, defaults: {name: user.name, email: user.email, picture: user.picture, firstName: user.firstName}})
-        .spread((user, created) => {
-            callback(user);
-        })
-    });
-  }
+  const Request = sequelize.define('request', {
+      id: {
+          type: Sequelize.STRING,
+          primaryKey: true
+      },
+      subject: {
+          type: Sequelize.STRING
+      },
+      request: {
+          type: Sequelize.STRING
+      },
+      location: {
+          type: Sequelize.STRING
+      }
+  })
 
-  // User.sync({force: true}).then(() => {
-//     // Table created
-//     return User.create({
-//         name: 'Jon',
-//         email: 'Hancock'
-//     });
-// });
+Request.belongsTo(User);
+
+  //add user to DB if doesn't already exist
+let addUserToDB = (user, callback) => {
+User.sync().then(() => {
+// Table created
+    User.findOrCreate({where: {id: user.id}, defaults: {name: user.name, email: user.email, picture: user.picture, firstName: user.firstName}})
+    .spread((user, created) => {
+        callback(user);
+    })
+});
+}
+
+let addRequestToDB = (request, callback) => {
+    Request.sync().then(() => {
+        Request.create({id: request.id, subject: request.subject, request: request.request, location: request.location, userId: request.userId})
+        .then((request) => {
+            callback(request)
+        })
+    })
+}
+
+let getRequestsFromDB = (callback) => {
+    Request.findAll({
+        attributes: ['id', 'subject', 'request', 'location', 'userId', 'createdAt']
+    }).then(requests => {
+        callback(requests)
+    })
+}
 
 // User.findAll().then(users => {
 //     //console.log('users', users)
 // })
 
   module.exports = {
-      addUserToDB: addUserToDB
+      addUserToDB: addUserToDB,
+      addRequestToDB: addRequestToDB,
+      getRequestsFromDB: getRequestsFromDB
   }

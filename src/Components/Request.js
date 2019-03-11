@@ -4,9 +4,10 @@ const Request = function(props) {
 
     return (
         <div>
-            {props.request.userName || ""} <br/>
-            {props.request.title || "no title"} <br/>
-            {props.request.message || "no message"} <br/>
+            {props.request.name || ""} <br/>
+            {props.request.subject || "no title"} <br/>
+            {props.request.request || "no message"} <br/>
+            {props.request.location || "no location"} <br/>
         </div>
     )
 

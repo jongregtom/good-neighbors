@@ -1,16 +1,18 @@
 const requests = 
     [
         {
-            userName: 'Abe',
-            title: 'title1',
-            message: 'message1',
-            email: 'abe@abe.com'
+            'id': '1234',
+            'subject': 'subjec1',
+            'request': 'title1',
+            'location': 'livermore',
+            'userId': '1234'
         },
         {
-            userName: 'Bob',
-            title: 'title2',
-            message: 'message2',
-            email: 'bob@bob.com'
+            'id': '5678',
+            'subject': 'subject2',
+            'request': 'title2',
+            'location': 'crockett',
+            'userId': '1234'
         }
     ]
 

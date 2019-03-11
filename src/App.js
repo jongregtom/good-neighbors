@@ -4,9 +4,8 @@ import auth0Client from './Auth';
 import Callback from './Callback';
 import NavBar from './Components/NavBar';
 import Feed from './Components/Feed';
-import Location from './Components/Location';
-//import LandingPage from './Components/LandingPage';
-import { requests } from './dummyData';
+import CreateRequest from './Components/CreateRequest';
+//import { requests } from './dummyData';
 import places from 'places.js';
 
 class App extends Component {
@@ -15,10 +14,10 @@ class App extends Component {
     this.state = {
       user: null,
       feed: [],
-      location: '',
+      locationResult: '',
       value: ''
     }
-    this.signIn = this.signIn.bind(this);
+    //this.signIn = this.signIn.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.addUser = this.addUser.bind(this);
   }
@@ -28,38 +27,35 @@ class App extends Component {
 
   componentDidMount() {
     //get current request when page loads
-    this.setState({feed: requests});
-    
-    //for Location component, uses places.js to autocomplete cities
-    var placesAutoComplete = places({
-      appId: 'plAIVCRMEQI2',
-      apiKey: '8c6f78c9fb0d763eb44acdddc3dbbf19',
-      container: document.querySelector('.search-input')
-    }).configure({
-      type: 'city'
-    });
-    //set location state to value selected
-    placesAutoComplete.on('change', e => this.setState({location: e.suggestion.value, value: ''}))
+    //this.setState({feed: requests});
+
+    var placesAutoComplete = (selector) => {
+      return places({
+        appId: 'plAIVCRMEQI2',
+        apiKey: '8c6f78c9fb0d763eb44acdddc3dbbf19',
+        container: document.querySelector(selector)
+      }).configure({
+        type: 'city'
+      });
+    }
+    //provide selector to select element targeted
+    placesAutoComplete('.request-location-input').on('change', e => this.setState({locationResult: e.suggestion.value, value: ''}))
   }
 
   componentDidUpdate() {
     //get user info from sign in
+    // if (this.state.user === null && auth0Client.isAuthenticated()) {
+    //   this.setState({user: auth0Client.getProfile()}, () => {
+    //     this.addUser(this.state.user);
+    //   })
+    // }
     if (this.state.user === null && auth0Client.isAuthenticated()) {
       this.setState({user: auth0Client.getProfile()}, () => {
         this.addUser(this.state.user);
       })
-
     }
   }
   
-  signIn = function() {
-    auth0Client.signIn();
-  }
-
-  getUserInfo = function() {
-    return auth0Client.getProfile().name;
-  }
-
   handleChange(e) {
     this.setState({value: e.target.value})
   }
@@ -73,7 +69,7 @@ class App extends Component {
       }
     }`;
     
-    fetch('http://localhost:8080/graphql', {
+    fetch(`http://localhost:${process.env.PORT || '8080'}/graphql`, {
       method: 'POST',
       headers: {
         'Content-Type':  'application/json',
@@ -109,7 +105,8 @@ class App extends Component {
       <div>
         <div>
           <NavBar />
-          <Location location={this.state.location} value={this.state.value} handleChange={this.handleChange} />
+
+          <CreateRequest locationResult={this.state.locationResult} addRequest={this.addRequest} value={this.state.value} handleChange={this.handleChange}  user={this.state.user} />
           <Feed feed={this.state.feed}/>
         </div>
         <Route exact path='/callback' component={Callback}/>
