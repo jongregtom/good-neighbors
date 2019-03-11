@@ -5,9 +5,9 @@ const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
 const graphqlHTTP = require('express-graphql');
 const { buildSchema } = require('graphql');
+const { GraphQLDateTime } = require('graphql-iso-date');
 const cors = require('cors');
 const { addUserToDB, addRequestToDB, getRequestsFromDB } = require('../database/index.js');
-const requests = require('../src/dummyData.js');
 
 var app = express();
 const port = process.env.PORT || 8080;
@@ -68,7 +68,9 @@ var schema = buildSchema(`
     request: String
     location: String
     userId: String
+    createdAt: Date
   }
+  scalar Date
   type Query {
     hello: String
     getRequests: [Request]
@@ -90,17 +92,18 @@ class User {
 }
 
 class Request {
-    constructor({id, subject, request, location, userId}) {
+    constructor({id, subject, request, location, userId, createdAt}) {
         this.id = id;
         this.subject = subject;
         this.request = request;
         this.location = location;
-        this.createdAt = this.createdAt;
         this.userId = userId;
+        this.createdAt = createdAt;
     }
 }
 
 var root = {
+    Date: GraphQLDateTime,
     addUser: ({input}) => {
       return new Promise((resolve, reject) => {
         addUserToDB(input, (res) => {
@@ -121,6 +124,7 @@ var root = {
     getRequests: () => {
         return new Promise((resolve, reject) => {
           getRequestsFromDB(res => {
+            console.log('res', res)
             res.map((request) => {
               new Request(request.dataValues);
             })

@@ -17,6 +17,7 @@ const Feed = function(props) {
                 request
                 location
                 userId
+                createdAt
             }
         }`;
         fetch(`http://localhost:${process.env.PORT || '8080'}/graphql`, {
