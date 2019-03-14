@@ -7,7 +7,7 @@ const graphqlHTTP = require('express-graphql');
 const { buildSchema } = require('graphql');
 const { GraphQLDateTime } = require('graphql-iso-date');
 const cors = require('cors');
-const { addUserToDB, addRequestToDB, getRequestsFromDB } = require('../database/index.js');
+const { addUserToDB, addRequestToDB, getRequestsFromDB, getUserFromDB } = require('../database/index.js');
 
 var app = express();
 const port = process.env.PORT || 8080;
@@ -68,11 +68,13 @@ var schema = buildSchema(`
     request: String
     location: String
     userId: String
+    userName: String
     createdAt: Date
   }
   scalar Date
   type Query {
     hello: String
+    getUser(id: String): User
     getRequests: [Request]
   }
   type Mutation {
@@ -92,7 +94,7 @@ class User {
 }
 
 class Request {
-    constructor({id, subject, request, location, userId, createdAt}) {
+    constructor({id, subject, request, location, userId, userName, createdAt}) {
         this.id = id;
         this.subject = subject;
         this.request = request;
@@ -104,6 +106,15 @@ class Request {
 
 var root = {
     Date: GraphQLDateTime,
+    getUser: ({id}) => {
+      return new Promise((resolve, reject) => {
+        getUserFromDB(id, (result) => {
+          result.dataValues.id = id;
+          resolve(result.dataValues)
+        })
+      })
+      .then((result) => new User(result))
+    },
     addUser: ({input}) => {
       return new Promise((resolve, reject) => {
         addUserToDB(input, (res) => {
@@ -122,27 +133,15 @@ var root = {
         .then((result) => new Request(result))
     },
     getRequests: () => {
-        return new Promise((resolve, reject) => {
-          getRequestsFromDB(res => {
-            console.log('res', res)
-            res.map((request) => {
-              new Request(request.dataValues);
-            })
-            resolve(res)
-          })
+      return new Promise((resolve, reject) => {
+        getRequestsFromDB(requests => {
+          resolve(requests)
         })
-        .then(res => res)
-        //return requests.requests
+      })
+      .then(res => res)
 
     }
 };
-
-getRequestsFromDB(result => {
-  // let mapped = result.map(result => {
-    
-  // })
-  console.log(result.map((res) => res.dataValues))
-})
 
 app.use('/graphql', bodyParser.json(), graphqlHTTP({
     schema: schema,

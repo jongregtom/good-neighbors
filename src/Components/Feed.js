@@ -17,6 +17,7 @@ const Feed = function(props) {
                 request
                 location
                 userId
+                userName
                 createdAt
             }
         }`;

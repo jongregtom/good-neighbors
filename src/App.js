@@ -39,16 +39,10 @@ class App extends Component {
       });
     }
     //provide selector to select element targeted
-    placesAutoComplete('.request-location-input').on('change', e => this.setState({locationResult: e.suggestion.value, value: ''}))
+    placesAutoComplete('.request-location-input').on('change', e => this.setState({locationResult: e.suggestion.value}))
   }
 
   componentDidUpdate() {
-    //get user info from sign in
-    // if (this.state.user === null && auth0Client.isAuthenticated()) {
-    //   this.setState({user: auth0Client.getProfile()}, () => {
-    //     this.addUser(this.state.user);
-    //   })
-    // }
     if (this.state.user === null && auth0Client.isAuthenticated()) {
       this.setState({user: auth0Client.getProfile()}, () => {
         this.addUser(this.state.user);
@@ -90,6 +84,7 @@ class App extends Component {
     })
       .then(r => r.json())
       .then(res => console.log('data returned', res))
+      .catch(err => console.log(err))
   }
 
   render() {

@@ -49,9 +49,9 @@ const CreateRequest = function(props) {
         <form onSubmit={handleSubmit}>
             <label>
                 Create New Request:
-                <input type="text" placeholder="Subject" value={subjectValue} onChange={e => setSubjectValue(e.target.value)} />
-                <input type="text" placeholder="Enter Request Here" value={requestValue} onChange={e => setRequestValue(e.target.value)} />
-                <input type="text" value={locationValue} onChange={e => setLocationValue(e.target.value)} className="request-location-input"></input>
+                <input type="text" placeholder="Title" value={subjectValue} onChange={e => setSubjectValue(e.target.value)} />
+                <input type="text" placeholder="Enter Details Here" value={requestValue} onChange={e => setRequestValue(e.target.value)} />
+                <input type="text" placeholder="Enter your location here for better results" value={locationValue} onChange={e => setLocationValue(e.target.value)} className="request-location-input"></input>
                 <input type="submit" value="Submit" />
             </label>
         </form>

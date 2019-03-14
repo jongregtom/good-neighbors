@@ -76,6 +76,14 @@ let getRequestsFromDB = (callback) => {
     })
 }
 
+let getUserFromDB = (id, callback) => {
+    User.findAll({
+        where: {
+            id: id
+        }
+    //returns user's full name
+    }).then(user => callback(user[0]))
+}
 // User.findAll().then(users => {
 //     //console.log('users', users)
 // })
@@ -83,5 +91,6 @@ let getRequestsFromDB = (callback) => {
   module.exports = {
       addUserToDB: addUserToDB,
       addRequestToDB: addRequestToDB,
-      getRequestsFromDB: getRequestsFromDB
+      getRequestsFromDB: getRequestsFromDB,
+      getUserFromDB: getUserFromDB 
   }
