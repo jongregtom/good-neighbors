@@ -1,5 +1,5 @@
 import auth0 from 'auth0-js';
-const redirectUri = `http://localhost:${process.env.PORT || '3000'}/callback`;
+const redirectUri = (process.env.NODE_ENV === "production") ? 'https://good-neighbors-staging.herokuapp.com/' : 'http://localhost:3000/callback';
 console.log('uri', redirectUri);
 
 class Auth {
@@ -8,7 +8,7 @@ class Auth {
       domain: 'good-neighbors.auth0.com',
       audience: 'https://good-neighbors.auth0.com/userinfo',
       clientID: 'A02LrzuM7sqbnPmk4XFqG5-b94mKu0Nq',
-      redirectUri: 'http://localhost:8080/callback',
+      redirectUri: redirectUri,
       responseType: 'id_token',
       scope: 'openid email profile'
     });
