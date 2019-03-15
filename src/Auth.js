@@ -1,4 +1,6 @@
 import auth0 from 'auth0-js';
+const redirectUri = `http://localhost:${process.env.PORT || '3000'}/callback`;
+console.log('uri', redirectUri);
 
 class Auth {
   constructor() {
@@ -6,7 +8,7 @@ class Auth {
       domain: 'good-neighbors.auth0.com',
       audience: 'https://good-neighbors.auth0.com/userinfo',
       clientID: 'A02LrzuM7sqbnPmk4XFqG5-b94mKu0Nq',
-      redirectUri: 'http://localhost:3000/callback',
+      redirectUri: 'http://localhost:8080/callback',
       responseType: 'id_token',
       scope: 'openid email profile'
     });

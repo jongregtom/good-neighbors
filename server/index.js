@@ -152,3 +152,5 @@ app.use('/graphql', bodyParser.json(), graphqlHTTP({
 app.listen(port, function() {
     console.log(`listening on port ${port}!`);
 });
+
+module.exports.port = port;
