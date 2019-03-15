@@ -44,6 +44,8 @@ class App extends Component {
   }
 
   componentDidUpdate() {
+    console.log('isAuth?', auth0Client.isAuthenticated());
+    console.log('getProfile', auth0Client.getProfile());
     if (this.state.user === null && auth0Client.isAuthenticated()) {
       this.setState({user: auth0Client.getProfile()}, () => {
         this.addUser(this.state.user);
