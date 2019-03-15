@@ -28,18 +28,19 @@ class App extends Component {
   componentDidMount() {
     //get current request when page loads
     //this.setState({feed: requests});
-
-    var placesAutoComplete = (selector) => {
-      return places({
-        appId: 'plAIVCRMEQI2',
-        apiKey: '8c6f78c9fb0d763eb44acdddc3dbbf19',
-        container: document.querySelector(selector)
-      }).configure({
-        type: 'city'
-      });
+    if (document.querySelector('.request-location-input') !== null) {
+      var placesAutoComplete = (selector) => {
+        return places({
+          appId: 'plAIVCRMEQI2',
+          apiKey: '8c6f78c9fb0d763eb44acdddc3dbbf19',
+          container: document.querySelector(selector)
+        }).configure({
+          type: 'city'
+        });
+      }
+      //provide selector to select element targeted
+      placesAutoComplete('.request-location-input').on('change', e => this.setState({locationResult: e.suggestion.value}))
     }
-    //provide selector to select element targeted
-    placesAutoComplete('.request-location-input').on('change', e => this.setState({locationResult: e.suggestion.value}))
   }
 
   componentDidUpdate() {
