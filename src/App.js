@@ -48,6 +48,7 @@ class App extends Component {
       this.setState({user: auth0Client.getProfile()}, () => {
         this.addUser(this.state.user);
       })
+      console.log('welcome!')
     }
   }
   
