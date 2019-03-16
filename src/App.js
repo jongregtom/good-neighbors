@@ -26,8 +26,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    //get current request when page loads
-    //this.setState({feed: requests});
+    //select input tag with className given to utilize places.js, conditional is required as tests won't pass
     if (document.querySelector('.request-location-input') !== null) {
       var placesAutoComplete = (selector) => {
         return places({
@@ -44,14 +43,11 @@ class App extends Component {
   }
 
   componentDidUpdate() {
-    console.log('isAuth?', auth0Client.isAuthenticated());
-    console.log('getProfile', auth0Client.getProfile());
     if (this.state.user === null && auth0Client.isAuthenticated()) {
       this.setState({user: auth0Client.getProfile()}, () => {
         console.log('state', this.state.user)
         this.addUser(this.state.user);
       })
-      console.log('welcome!')
     }
   }
   
@@ -60,7 +56,7 @@ class App extends Component {
   }
 
   addUser(user) {
-    let id = user.aud, name = user.name || user.nickname, email = user.email, picture = user.picture || null, firstName = user.given_name || user.nickname; 
+    let id = user.sub, name = user.name || user.nickname, email = user.email, picture = user.picture || null, firstName = user.given_name || user.nickname; 
     var query = `mutation addUser($input: UserInput) {
       addUser(input: $input) {
         id

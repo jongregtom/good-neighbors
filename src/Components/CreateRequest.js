@@ -8,11 +8,12 @@ const CreateRequest = function(props) {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        (props.user) ? addRequest() : alert('Please sign in to submit a request.') 
         addRequest();
     }
 
     const addRequest = () => {
-        let subject = subjectValue, request = requestValue, location = props.locationResult, userId = props.user.aud;
+        let subject = subjectValue, request = requestValue, location = props.locationResult, userId = (props.user) ? props.user.sub : null;
         var query = `mutation addRequest($input: RequestInput) {
           addRequest(input: $input) {
             id
