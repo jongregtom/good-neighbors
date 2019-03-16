@@ -48,6 +48,7 @@ class App extends Component {
     console.log('getProfile', auth0Client.getProfile());
     if (this.state.user === null && auth0Client.isAuthenticated()) {
       this.setState({user: auth0Client.getProfile()}, () => {
+        console.log('state', this.state.user)
         this.addUser(this.state.user);
       })
       console.log('welcome!')
