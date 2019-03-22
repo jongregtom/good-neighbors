@@ -1,6 +1,5 @@
 import auth0 from 'auth0-js';
 const redirectUri = (process.env.NODE_ENV === "production") ? 'https://good-neighbors-staging.herokuapp.com/callback' : 'http://localhost:3000/callback';
-console.log('uri', redirectUri);
 
 class Auth {
   constructor() {

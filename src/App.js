@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Route} from 'react-router-dom';
+import {Route, Switch} from 'react-router-dom';
 import auth0Client from './Auth';
 import Callback from './Callback';
 import NavBar from './Components/NavBar';
@@ -13,7 +13,6 @@ class App extends Component {
     super(props);
     this.state = {
       user: null,
-      feed: [],
       locationResult: '',
       value: ''
     }
@@ -89,23 +88,19 @@ class App extends Component {
   }
 
   render() {
-    //below commented out for development
-    // if (!auth0Client.isAuthenticated()) {
-    //   return (
-    //     <div>
-    //        <LandingPage />
-    //     </div>
-    //   )
-    // }
+    //<CreateRequest locationResult={this.state.locationResult} addRequest={this.addRequest} value={this.state.value} handleChange={this.handleChange}  user={this.state.user} />
     return (
       <div>
-        <div>
-          <NavBar />
-
-          <CreateRequest locationResult={this.state.locationResult} addRequest={this.addRequest} value={this.state.value} handleChange={this.handleChange}  user={this.state.user} />
-          <Feed feed={this.state.feed}/>
-        </div>
-        <Route exact path='/callback' component={Callback}/>
+       
+        <NavBar />
+        <Switch>
+        <Route exact path='/' component={Feed} />
+        <Route exact path='/callback' component={Callback} />
+        <Route 
+          path='/Request'  
+          render={props => <CreateRequest {...props} locationResult={this.state.locationResult} addRequest={this.addRequest} value={this.state.value} handleChange={this.handleChange}  user={this.state.user} />} 
+        />
+        </Switch>
       </div>
     );
   }
