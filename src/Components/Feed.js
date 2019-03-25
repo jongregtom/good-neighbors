@@ -4,10 +4,8 @@ import Request from './Request';
 const Feed = function(props) {
     const [feed, setFeedValue] = useState([]);
     useEffect(() => {
-        if (feed.length === 0) {
-            getRequests();
-        }
-    })
+        getRequests();
+    }, [])
 
     const getRequests = () => {
         var query = `query {

@@ -1,17 +1,65 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+import LocationPopUp from './LocationPopUp';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
+
+const styles = theme => ({
+  root: {
+    ...theme.mixins.gutters(),
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2,
+  },
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+  },
+  dense: {
+    marginTop: 16,
+  },
+  menu: {
+    width: 200,
+  },
+  button: {
+    margin: theme.spacing.unit,
+  },
+  input: {
+    display: 'none',
+  },
+});
 
 const CreateRequest = function(props) {
     const [subjectValue, setSubjectValue] = useState('');
     const [requestValue, setRequestValue] = useState('');
     const [locationValue, setLocationValue] = useState('');
-    //let location = props.location, userId = props.user.id || null;
+
+    useEffect(() => {
+      console.log(locationValue)
+    })
+
+  
+    const handleLocationChange = (location) => {
+      setLocationValue(location)
+    }
+
+    const handleLocationSet = (location) => {
+      setLocationValue(location)
+    }
+
+    const { classes } = props;
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        (props.user) ? addRequest() : alert('Please sign in to submit a request.') 
-        addRequest();
+        (props.user) ? addRequest() : alert('Please sign in to submit a request.');
+        props.history.push('/')
     }
-
+ 
     const addRequest = () => {
         let subject = subjectValue, request = requestValue, location = props.locationResult, userId = (props.user) ? props.user.sub : null;
         var query = `mutation addRequest($input: RequestInput) {
@@ -46,17 +94,57 @@ const CreateRequest = function(props) {
           .then(res => console.log('data returned', res))
     }
 
-    return (  
+    return (
+      <div>  
+        <Paper className={classes.root} elevation={10}>
+        <LocationPopUp locationValue={locationValue} handleLocationChange={handleLocationChange} handleLocationSet={handleLocationSet} locationButtonDialog={"Enter Location for Best Results"}/>
+        <form className={classes.container} noValidate autoComplete="off">
+          <TextField
+            required
+            id="filled-name"
+            label="Subject"
+            value={subjectValue}
+            onChange={(e) => {setSubjectValue(e.target.value)}}
+            className={classes.textField}
+            margin="normal"
+            helperText="Enter a short Description"
+            variant="outlined"
+          />
+        </form>
+        <form className={classes.container} noValidate autoComplete="off">
+          <TextField
+            id="filled-multiline-static"
+            label="Enter Details Here"
+            multiline
+            rows="4"
+            rowsMax="10"
+            value={requestValue}
+            onChange={(e) => {setRequestValue(e.target.value)}}
+            className={classes.textField}
+            margin="normal"
+            helperText="Be as detailed as possible here"
+            variant="outlined"
+          />
+        </form>
+        <Button variant="contained" color="primary" className={classes.button} onClick={handleSubmit} to="/" >
+          Submit
+        </Button>
+        </Paper>
+
         <form onSubmit={handleSubmit}>
             <label>
                 Create New Request:
                 <input type="text" placeholder="Title" value={subjectValue} onChange={e => setSubjectValue(e.target.value)} />
                 <input type="text" placeholder="Enter Details Here" value={requestValue} onChange={e => setRequestValue(e.target.value)} />
-                <input type="text" placeholder="Enter your location here for better results" value={locationValue} onChange={e => setLocationValue(e.target.value)} className="request-location-input"></input>
                 <input type="submit" value="Submit" />
             </label>
         </form>
+      </div>
     )
 }
 
-export default CreateRequest;
+CreateRequest.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(CreateRequest);

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {withRouter} from 'react-router-dom';
 import auth0Client from '../Auth';
 import PropTypes from 'prop-types';
@@ -23,25 +23,8 @@ import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 
 const theme = createMuiTheme({
-    pallete: {
-       primary: {
-        "50": "#21412a",
-        "100": "#21412a",
-        "200": "#21412a",
-        "300": "#21412a",
-        "400": "#21412a",
-        "500": "#21412a",
-        "600": "#21412a",
-        "700": "#21412a",
-        "800": "#21412a",
-        "900": "#21412a",
-        "A100": "#21412a",
-        "A200": "#21412a",
-        "A400": "#21412a",
-        "A700": "#21412a",
-        "contrastDefaultColor": "light"
-      }
-  
+    typography: {
+        useNextVariants: true,
     },
 })
 
@@ -121,15 +104,17 @@ const NavBar = function(props) {
         setOpenValue(false);
     };
 
+    const handleClick = (route) => {
+        handleDrawerClose();
+        props.history.push(route);
+    }
+
     const signOut = () => {
         auth0Client.signOut();
         props.history.replace('/');
     };
 
     const { classes } = props;
-    console.log('props', props)
-    console.log('theme', theme)
-    //const { openValue } = openValue; 
 
     return (
         <div className={classes.root}>
@@ -150,7 +135,7 @@ const NavBar = function(props) {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h5" color="inherit" noWrap>
-                        Menu
+                        Good Neighbors
                     </Typography>
                     {
                         !auth0Client.isAuthenticated() &&
@@ -180,7 +165,11 @@ const NavBar = function(props) {
             </div>
             <Divider />
             <List>
-                <ListItem button key={0}>
+                <ListItem button key={0} onClick={() => {handleClick('/')}}>
+                    <ListItemIcon>{<InboxIcon />}</ListItemIcon>
+                    <ListItemText primary={'Home'}/>
+                </ListItem>
+                <ListItem button key={1} onClick={() => {handleClick('/CreateRequest')}}>
                     <ListItemIcon>{<InboxIcon />}</ListItemIcon>
                     <ListItemText primary={'Make a Request'}/>
                 </ListItem>

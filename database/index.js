@@ -70,6 +70,9 @@ let addRequestToDB = (request, callback) => {
 
 let getRequestsFromDB = (callback) => {
     Request.findAll({
+        order: [
+            ['createdAt', 'DESC']
+        ],
         attributes: ['id', 'subject', 'request', 'location', 'userId', 'createdAt']
     }).then(requests => {
         callback(requests)

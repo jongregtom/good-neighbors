@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import {Route, Switch} from 'react-router-dom';
+import {Route, Switch, withRouter} from 'react-router-dom';
 import auth0Client from './Auth';
 import Callback from './Callback';
 import NavBar from './Components/NavBar';
 import Feed from './Components/Feed';
 import CreateRequest from './Components/CreateRequest';
-//import { requests } from './dummyData';
-import places from 'places.js';
 
 class App extends Component {
   constructor(props) {
@@ -25,20 +23,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    //select input tag with className given to utilize places.js, conditional is required as tests won't pass
-    if (document.querySelector('.request-location-input') !== null) {
-      var placesAutoComplete = (selector) => {
-        return places({
-          appId: 'plAIVCRMEQI2',
-          apiKey: '8c6f78c9fb0d763eb44acdddc3dbbf19',
-          container: document.querySelector(selector)
-        }).configure({
-          type: 'city'
-        });
-      }
-      //provide selector to select element targeted
-      placesAutoComplete('.request-location-input').on('change', e => this.setState({locationResult: e.suggestion.value}))
-    }
+      //placesAutoComplete('.request-location-input').on('change', e => this.setState({locationResult: e.suggestion.value}))
   }
 
   componentDidUpdate() {
@@ -93,17 +78,18 @@ class App extends Component {
       <div>
        
         <NavBar />
+
         <Switch>
-        <Route exact path='/' component={Feed} />
-        <Route exact path='/callback' component={Callback} />
-        <Route 
-          path='/Request'  
-          render={props => <CreateRequest {...props} locationResult={this.state.locationResult} addRequest={this.addRequest} value={this.state.value} handleChange={this.handleChange}  user={this.state.user} />} 
-        />
+          <Route exact path='/' component={Feed} />
+          <Route exact path='/callback' component={Callback} />
+          <Route 
+            path='/CreateRequest'  
+            render={props => <CreateRequest {...props} locationResult={this.state.locationResult} addRequest={this.addRequest} value={this.state.value} handleChange={this.handleChange}  user={this.state.user} placesAutoComplete={this.placesAutoComplete}/>} 
+          />
         </Switch>
       </div>
     );
   }
 }
 
-export default App;
+export default withRouter(App);
