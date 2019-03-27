@@ -73,7 +73,7 @@ const styles = theme => ({
   },
   content: {
     flexGrow: 1,
-    padding: theme.spacing.unit * 3,
+    padding: theme.spacing.unit,
     transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
@@ -85,6 +85,10 @@ const styles = theme => ({
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
+    marginLeft: 0,
+  },
+  button: {
+    position: 'relative',
     marginLeft: 0,
   },
 });
@@ -134,17 +138,17 @@ const NavBar = function(props) {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h5" color="inherit" noWrap>
+                    <Typography variant="h5" color="inherit" noWrap className={classes.root}>
                         Good Neighbors
                     </Typography>
                     {
                         !auth0Client.isAuthenticated() &&
-                        <Button color="inherit" onClick={auth0Client.signIn}>Login</Button>
+                        <Button className={classes.button} color="inherit" onClick={auth0Client.signIn}>Login</Button>
                     }
                     {
                         auth0Client.isAuthenticated() &&
                         <div>
-                            <Button color="inherit" onClick={() => {signOut()}}>Logout</Button>
+                            <Button className={classes.button} color="inherit" onClick={() => {signOut()}}>Logout</Button>
                         </div>
                     }
                 </Toolbar>
@@ -175,14 +179,6 @@ const NavBar = function(props) {
                 </ListItem>
             </List>
             <Divider />
-            <List>
-                {['All mail', 'Trash', 'Spam'].map((text, index) => (
-                <ListItem button key={text}>
-                    <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-                    <ListItemText primary={text} />
-                </ListItem>
-                ))}
-            </List>
             </Drawer>
             <main
                 className={classNames(classes.content, {

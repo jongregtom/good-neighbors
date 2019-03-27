@@ -15,10 +15,11 @@ const styles = theme => ({
   container: {
     display: 'flex',
     flexWrap: 'wrap',
+    justifyContent: 'space-around',
   },
   textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing.unit * 2,
+    marginRight: theme.spacing.unit * 2,
   },
   dense: {
     marginTop: 16,
@@ -27,7 +28,7 @@ const styles = theme => ({
     width: 200,
   },
   button: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing.unit * 2,
   },
   input: {
     display: 'none',
@@ -61,7 +62,7 @@ const CreateRequest = function(props) {
     }
  
     const addRequest = () => {
-        let subject = subjectValue, request = requestValue, location = props.locationResult, userId = (props.user) ? props.user.sub : null;
+        let subject = subjectValue, request = requestValue, location = locationValue, userId = (props.user) ? props.user.sub : null;
         var query = `mutation addRequest($input: RequestInput) {
           addRequest(input: $input) {
             id
@@ -97,7 +98,6 @@ const CreateRequest = function(props) {
     return (
       <div>  
         <Paper className={classes.root} elevation={10}>
-        <LocationPopUp locationValue={locationValue} handleLocationChange={handleLocationChange} handleLocationSet={handleLocationSet} locationButtonDialog={"Enter Location for Best Results"}/>
         <form className={classes.container} noValidate autoComplete="off">
           <TextField
             required
@@ -126,19 +126,13 @@ const CreateRequest = function(props) {
             variant="outlined"
           />
         </form>
+        <LocationPopUp className={classes.container} locationValue={locationValue} handleLocationChange={handleLocationChange} handleLocationSet={handleLocationSet} locationButtonDialog={"Enter Location for Best Results"}/>
+        <div style={{display: 'flex', justifyContent: 'center'}}>
         <Button variant="contained" color="primary" className={classes.button} onClick={handleSubmit} to="/" >
           Submit
         </Button>
+        </div>
         </Paper>
-
-        <form onSubmit={handleSubmit}>
-            <label>
-                Create New Request:
-                <input type="text" placeholder="Title" value={subjectValue} onChange={e => setSubjectValue(e.target.value)} />
-                <input type="text" placeholder="Enter Details Here" value={requestValue} onChange={e => setRequestValue(e.target.value)} />
-                <input type="submit" value="Submit" />
-            </label>
-        </form>
       </div>
     )
 }

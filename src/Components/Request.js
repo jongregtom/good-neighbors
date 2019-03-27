@@ -20,7 +20,9 @@ moment().format();
 
 const styles = theme => ({
     card: {
-      maxWidth: 400,
+      width: 425,
+      marginTop: 10,
+      marginBottom: 10,
     },
     media: {
       height: 0,
@@ -116,12 +118,12 @@ const Request = function(props) {
                     </Typography>
                 </CardContent>
                 <CardActions className={classes.actions} disableActionSpacing>
-                    <IconButton aria-label="Add to favorites">
+                    {/* <IconButton aria-label="Add to favorites">
                         <FavoriteIcon />
                     </IconButton>
                     <IconButton aria-label="Share">
                         <ShareIcon />
-                    </IconButton>
+                    </IconButton> */}
                     <IconButton
                         className={classnames(classes.expand, {
                         [classes.expandOpen]: expandedValue,
