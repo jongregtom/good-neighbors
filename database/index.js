@@ -1,6 +1,17 @@
 const Sequelize = require('sequelize');
+const params = {
 
-const sequelize = new Sequelize('postgres://jonthomas@localhost:5432/postgres');
+}
+
+//const sequelize = new Sequelize('postgres://jonthomas@localhost:5432/postgres');
+const sequelize = new Sequelize('postgres://yveyhsjynuzpxz:600ab292e2f6a2f2d3eb75d2d8dd82b1730b6eddffd606fdebc31f94dad9cad4@ec2-174-129-10-235.compute-1.amazonaws.com:5432/d4mvsdakenpuce', {
+    dialect: 'postgres',
+    protocol: 'postgres',
+    dialectOptions: {
+        ssl: true
+    }
+});
+//const sequelize = new Sequelize('pg:psql postgresql-clear-48893 --app good-neighbors-staging');
 
 sequelize
   .authenticate()

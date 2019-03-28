@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import Request from './Request';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 
@@ -14,6 +13,7 @@ const styles = theme => ({
     overflow: 'hidden',
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing.unit * 2,
+    height: '100vh',
   },
   button: {
     margin: theme.spacing.unit,
