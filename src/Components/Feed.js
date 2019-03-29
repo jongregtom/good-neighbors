@@ -36,7 +36,7 @@ const Feed = function(props) {
     const { classes } = props;
 
     const getRequests = () => {
-        console.log('process.env.PORT: ', process.env.PORT)
+        console.log('process.env: ', process.env)
         var query = `query {
             getRequests {
                 id
