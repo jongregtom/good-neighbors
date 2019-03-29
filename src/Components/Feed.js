@@ -13,7 +13,7 @@ const styles = theme => ({
     overflow: 'hidden',
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing.unit * 2,
-    height: '100vh',
+    height: '100%',
   },
   button: {
     margin: theme.spacing.unit,
@@ -36,6 +36,7 @@ const Feed = function(props) {
     const { classes } = props;
 
     const getRequests = () => {
+        console.log('process.env.PORT: ', process.env.PORT)
         var query = `query {
             getRequests {
                 id
