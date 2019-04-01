@@ -84,7 +84,7 @@ class App extends Component {
           <Route exact path='/callback' component={Callback} />
           <Route 
             path='/CreateRequest'  
-            render={props => <CreateRequest {...props} locationResult={this.state.locationResult} addRequest={this.addRequest} value={this.state.value} handleChange={this.handleChange}  user={this.state.user} placesAutoComplete={this.placesAutoComplete}/>} 
+            render={props => <CreateRequest {...props} locationResult={this.state.locationResult} addRequest={this.addRequest} value={this.state.value} handleChange={this.handleChange}  user={this.state.user} />} 
           />
         </Switch>
       </div>
