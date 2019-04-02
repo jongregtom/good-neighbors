@@ -23,6 +23,7 @@ class App extends Component {
   }
 
   componentDidMount() {
+
       //placesAutoComplete('.request-location-input').on('change', e => this.setState({locationResult: e.suggestion.value}))
   }
 
@@ -48,7 +49,7 @@ class App extends Component {
       }
     }`;
     
-    fetch(`http://localhost:${process.env.PORT || '8080'}/graphql`, {
+    fetch(`/graphql`, {
       method: 'POST',
       headers: {
         'Content-Type':  'application/json',

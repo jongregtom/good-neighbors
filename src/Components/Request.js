@@ -70,7 +70,7 @@ const Request = function(props) {
                 picture
             }
         }`;
-        fetch(`http://localhost:${process.env.PORT || '8080'}/graphql`, {
+        fetch(`/graphql`, {
           method: 'POST',
           headers: {
             'Content-Type':  'application/json',

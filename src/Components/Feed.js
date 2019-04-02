@@ -36,7 +36,6 @@ const Feed = function(props) {
     const { classes } = props;
 
     const getRequests = () => {
-        console.log('port: ', process.env.REACT_APP_PORT)
         var query = `query {
             getRequests {
                 id
@@ -48,7 +47,7 @@ const Feed = function(props) {
                 createdAt
             }
         }`;
-        fetch(`http://localhost:${process.env.PORT || '8080'}/graphql`, {
+        fetch(`/graphql`, {
           method: 'POST',
           headers: {
             'Content-Type':  'application/json',

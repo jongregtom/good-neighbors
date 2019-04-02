@@ -35,7 +35,7 @@ if (process.env.NODE_ENV === "production") {
     app.use(express.static(path.join(__dirname, '/../build')));
     // Handle React routing, return all requests to React app
     app.get('/*', function(req, res) {
-        res.sendFile(path.join(__dirname, '/../build', 'index.html'));
+        res.sendFile(path.join(__dirname, '/../build', 'index.html'), {PORT: port});
     });
 }
 
@@ -152,5 +152,3 @@ app.use('/graphql', bodyParser.json(), graphqlHTTP({
 app.listen(port, function() {
     console.log(`listening on port ${port}!`);
 });
-
-module.exports.port = port;
