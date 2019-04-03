@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import LocationPopUp from './LocationPopUp';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -42,11 +42,6 @@ const CreateRequest = function(props) {
     const [requestValue, setRequestValue] = useState('');
     const [locationValue, setLocationValue] = useState('');
 
-    useEffect(() => {
-      console.log(locationValue)
-    })
-
-  
     const handleLocationChange = (location) => {
       setLocationValue(location)
     }

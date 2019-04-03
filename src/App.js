@@ -34,6 +34,7 @@ class App extends Component {
         this.addUser(this.state.user);
       })
     }
+    console.log('isAuth?: ', auth0Client.isAuthenticated())
   }
   
   handleChange(e) {
@@ -41,7 +42,7 @@ class App extends Component {
   }
 
   addUser(user) {
-    let id = user.sub, name = user.name || user.nickname, email = user.email, picture = user.picture || null, firstName = user.given_name || user.nickname; 
+    let id = user.sub, name = user.nickname || user.name, email = user.email, picture = user.picture || null, firstName = user.given_name || user.nickname; 
     var query = `mutation addUser($input: UserInput) {
       addUser(input: $input) {
         id

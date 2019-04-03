@@ -112,7 +112,7 @@ const Request = function(props) {
                         {props.request.subject || "no subject"}
                     </Typography>
                     <Typography variant="caption" >
-                        {props.request.location || "no location"}
+                        {props.request.location || "unknown location"}
                     </Typography>
                 </CardContent>
                 <CardActions className={classes.actions} disableActionSpacing>

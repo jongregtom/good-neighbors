@@ -14,6 +14,7 @@ const styles = theme => ({
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing.unit * 2,
     height: '100%',
+    paddingLeft: theme.spacing.unit * 40,
   },
   button: {
     margin: theme.spacing.unit,

@@ -108,6 +108,10 @@ const NavBar = function(props) {
     };
 
     const handleClick = (route) => {
+        if (route === '/CreateRequest' && !auth0Client.isAuthenticated()) {
+            alert('You Must Log In to make a Request!!!');
+            return;
+        }
         handleDrawerClose();
         props.history.push(route);
     }
