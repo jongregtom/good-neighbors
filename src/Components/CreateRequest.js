@@ -55,7 +55,6 @@ const CreateRequest = function(props) {
     const handleSubmit = (e) => {
         e.preventDefault();
         (props.user) ? addRequest() : alert('Please sign in to submit a request.');
-        props.history.push('/')
     }
  
     const addRequest = () => {
@@ -88,8 +87,7 @@ const CreateRequest = function(props) {
             }
           })
         })
-          .then(r => r.json())
-          .then(res => console.log('data returned', res))
+          .then(r => props.history.push('/'))
     }
 
     return (
