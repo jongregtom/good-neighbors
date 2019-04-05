@@ -90,7 +90,7 @@ const LocationPopUp = function(props) {
           open={openValue}
           onClose={handleCancel}
         >
-        <DialogTitle>Enter the Location Here:</DialogTitle>
+        <DialogTitle>Location:</DialogTitle>
         <DialogContent>
             <Location id="form-dialog-title" locationValue={props.locationValue} handleLocationChange={props.handleLocationChange} handleLocationSet={props.handleLocationSet}/>
           </DialogContent>

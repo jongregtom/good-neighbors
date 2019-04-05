@@ -11,7 +11,6 @@ const styles = theme => ({
     flexWrap: 'wrap',
     justifyContent: 'space-around',
     overflow: 'hidden',
-    backgroundColor: theme.palette.background.paper,
     padding: theme.spacing.unit * 2,
     height: '100%',
     paddingLeft: theme.spacing.unit * 40,

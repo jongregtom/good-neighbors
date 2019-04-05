@@ -3,7 +3,7 @@ import {Route, Switch, withRouter} from 'react-router-dom';
 import auth0Client from './Auth';
 import Callback from './Callback';
 import NavBar from './Components/NavBar';
-import Feed from './Components/Feed';
+import Home from './Components/Home';
 import CreateRequest from './Components/CreateRequest';
 
 class App extends Component {
@@ -34,7 +34,6 @@ class App extends Component {
         this.addUser(this.state.user);
       })
     }
-    console.log('isAuth?: ', auth0Client.isAuthenticated())
   }
   
   handleChange(e) {
@@ -82,7 +81,7 @@ class App extends Component {
         <NavBar />
 
         <Switch>
-          <Route exact path='/' component={Feed} />
+          <Route exact path='/' component={Home} />
           <Route exact path='/callback' component={Callback} />
           <Route 
             path='/CreateRequest'  
