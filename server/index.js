@@ -75,7 +75,7 @@ var schema = buildSchema(`
   type Query {
     hello: String
     getUser(id: String): User
-    getRequests: [Request]
+    getRequests(location: String): [Request]
   }
   type Mutation {
     addUser(input: UserInput): User
@@ -132,9 +132,10 @@ var root = {
         })
         .then((result) => new Request(result))
     },
-    getRequests: () => {
+    getRequests: ({location}) => {
+      console.log(location)
       return new Promise((resolve, reject) => {
-        getRequestsFromDB(requests => {
+        getRequestsFromDB(location, requests => {
           resolve(requests)
         })
       })

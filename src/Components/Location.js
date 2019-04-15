@@ -13,9 +13,8 @@ const Location = function(props) {
             });
         placesAutoComplete.on('change', (e) => props.handleLocationSet(e.suggestion.value));
     }, [])
-
     return (
-        <input value={props.locationValue} onChange={(e) => props.handleLocationChange(e.target.value)} className="search-input"></input>
+        <input placeholder={props.placeHolder} value={props.locationValue} onChange={(e) => props.handleLocationChange(e.target.value)} className="search-input" ></input>
     )
 }
 

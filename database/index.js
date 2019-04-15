@@ -77,8 +77,13 @@ let addRequestToDB = (request, callback) => {
     })
 }
 
-let getRequestsFromDB = (callback) => {
+let getRequestsFromDB = (location, callback) => {
+    let whereStatement = {};
+    if (location !== '') {
+        whereStatement.location = location
+    }
     Request.findAll({
+        where: whereStatement,
         order: [
             ['createdAt', 'DESC']
         ],

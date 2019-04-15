@@ -1,13 +1,11 @@
-import React, {useState} from 'react';
+import React, {useEffect} from 'react';
+import Location from './Location';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
-import ClickAwayListener from '@material-ui/core/ClickAwayListener';
-import Grow from '@material-ui/core/Grow';
-import Paper from '@material-ui/core/Paper';
-import Popper from '@material-ui/core/Popper';
-import MenuItem from '@material-ui/core/MenuItem';
-import MenuList from '@material-ui/core/MenuList';
 import { withStyles } from '@material-ui/core/styles';
+import Chip from '@material-ui/core/Chip';
+import Grid from '@material-ui/core/Grid';
+
+let locationDisplayStatus;
 
 const styles = theme => ({
   root: {
@@ -15,64 +13,49 @@ const styles = theme => ({
     position: 'fixed',
     marginLeft: theme.spacing.unit * 2,
     marginTop: theme.spacing.unit * 2,
+    marginRight: theme.spacing.unit * 6,
+    justifyContent: 'space-around',
   },
-  paper: {
-    marginRight: theme.spacing.unit * 2,
+  location: {
+    top: 0,
+  },
+  chip: {
+    top: 40,
   },
 });
 
+
 const SearchBar = function(props) {
-    const [openValue, setOpenValue] = useState(false);
-
-    const handleToggle = () => {
-        setOpenValue(!openValue)
-    };
-    let anchorEl;
-
-    const handleClose = event => {
-        if (anchorEl.contains(event.target)) {
-            return;
-        }
-
-        setOpenValue(false);
-    };
-
     const { classes } = props;
-    const open = openValue;
+
+    function handleDelete() {
+        props.handleLocationChange('');
+        props.handleLocationSet('');
+    }
+
+    !props.locationSearch ? locationDisplayStatus = 'none' : locationDisplayStatus = '';
+
+    useEffect(() => {
+    }, [props.locationSearch])
 
     return (
         <div className={classes.root}>
-        <div>
-            <Button
-                buttonRef={node => {
-                    anchorEl = node;
-                }}
-                aria-owns={open ? 'menu-list-grow' : undefined}
-                aria-haspopup="true"
-                onClick={handleToggle}
-            >
-            Search By...(under construction)
-            </Button>
-            <Popper open={open} anchorEl={anchorEl} transition disablePortal>
-            {({ TransitionProps, placement }) => (
-                <Grow
-                {...TransitionProps}
-                id="menu-list-grow"
-                style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
-                >
-                <Paper>
-                    <ClickAwayListener onClickAway={handleClose}>
-                    <MenuList>
-                        <MenuItem onClick={handleClose}>KeyWord</MenuItem>
-                        <MenuItem onClick={handleClose}>User</MenuItem>
-                        <MenuItem onClick={handleClose}>Location</MenuItem>
-                    </MenuList>
-                    </ClickAwayListener>
-                </Paper>
-                </Grow>
-            )}
-            </Popper>
-        </div>
+            <Grid container className={classes.location}>
+                <Grid item>
+                    <Location placeHolder={props.placeHolder} locationValue={props.locationValue} handleLocationChange={props.handleLocationChange} handleLocationSet={props.handleLocationSet}/>
+                </Grid>
+            </Grid>
+
+            <Grid container className={classes.chip} style={{display: locationDisplayStatus}}>
+                <Grid item>
+                        <Chip
+                        label={props.locationSearch}
+                        onDelete={handleDelete}
+                        className={classes.chip}
+                        color="primary"
+                    />
+                </Grid>
+            </Grid>
         </div>
     );
 }

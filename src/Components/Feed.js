@@ -13,7 +13,7 @@ const styles = theme => ({
     overflow: 'hidden',
     padding: theme.spacing.unit * 2,
     height: '100%',
-    paddingLeft: theme.spacing.unit * 40,
+    paddingLeft: theme.spacing.unit * 50,
   },
   button: {
     margin: theme.spacing.unit,
@@ -29,32 +29,35 @@ const styles = theme => ({
 
 const Feed = function(props) {
     const [feed, setFeedValue] = useState([]);
+    let location = props.location;
+
     useEffect(() => {
         getRequests();
-    }, [])
+    }, [location])
 
     const { classes } = props;
 
     const getRequests = () => {
-        var query = `query {
-            getRequests {
-                id
-                subject
-                request
-                location
-                userId
-                userName
-                createdAt
-            }
-        }`;
-        fetch(`/graphql`, {
+        var query = `query GetRequest($location: String) {
+          getRequests(location: $location) {
+              id
+              subject
+              request
+              location
+              userId
+              userName
+              createdAt
+          }
+      }`;
+        fetch(`graphql`, {
           method: 'POST',
           headers: {
             'Content-Type':  'application/json',
             'Accept': 'application/json' 
           },
           body: JSON.stringify({
-            query
+            query,
+            variables: { location }
           })
         })
         .then(r => r.json())
@@ -63,13 +66,13 @@ const Feed = function(props) {
 
     return (
         <div className={classes.root}>
-            <GridList cellHeight="auto"  cols={1} >
-                {feed.map((request) => (
-                    <GridListTile key={request.id} cols={1}>
-                        <Request key={request.id} request={request} />
-                    </GridListTile>
-                ))}
-            </GridList>
+          <GridList cellHeight="auto"  cols={1} >
+              {feed.map((request) => (
+                  <GridListTile key={request.id} cols={1}>
+                      <Request key={request.id} request={request} />
+                  </GridListTile>
+              ))}
+          </GridList>
         </div>
         // <div className={classes.root}>
         //     <Button size="medium" className={classes.root}>Sort By Location</Button>
