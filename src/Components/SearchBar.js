@@ -5,8 +5,6 @@ import { withStyles } from '@material-ui/core/styles';
 import Chip from '@material-ui/core/Chip';
 import Grid from '@material-ui/core/Grid';
 
-let locationDisplayStatus;
-
 const styles = theme => ({
   root: {
     display: 'flex',
@@ -20,6 +18,7 @@ const styles = theme => ({
     top: 0,
   },
   chip: {
+    position: 'absolute',
     top: 40,
   },
 });
@@ -27,6 +26,7 @@ const styles = theme => ({
 
 const SearchBar = function(props) {
     const { classes } = props;
+    let locationDisplayStatus;
 
     function handleDelete() {
         props.handleLocationChange('');
