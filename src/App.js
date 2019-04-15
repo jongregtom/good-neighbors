@@ -30,7 +30,6 @@ class App extends Component {
   componentDidUpdate() {
     if (this.state.user === null && auth0Client.isAuthenticated()) {
       this.setState({user: auth0Client.getProfile()}, () => {
-        console.log('state', this.state.user)
         this.addUser(this.state.user);
       })
     }
@@ -68,8 +67,6 @@ class App extends Component {
         }
       })
     })
-      .then(r => r.json())
-      .then(res => console.log('data returned', res))
       .catch(err => console.log(err))
   }
 
