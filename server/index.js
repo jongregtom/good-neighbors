@@ -8,6 +8,7 @@ const { buildSchema } = require('graphql');
 const { GraphQLDateTime } = require('graphql-iso-date');
 const cors = require('cors');
 const { addUserToDB, addRequestToDB, getRequestsFromDB, getUserFromDB } = require('../database/index.js');
+require('newrelic');
 
 var app = express();
 const port = process.env.PORT || 8080;
