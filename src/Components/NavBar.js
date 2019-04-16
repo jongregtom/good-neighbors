@@ -20,6 +20,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
+import Avatar from '@material-ui/core/Avatar';
 
 const theme = createMuiTheme({
     typography: {
@@ -90,6 +91,11 @@ const styles = theme => ({
     position: 'relative',
     marginLeft: 0,
   },
+  icon: {
+   // display: 'flex',
+    position: 'relative',
+    marginRight: 80,
+  }
 });
 
 const drawerWidth = 240;
@@ -145,14 +151,23 @@ const NavBar = function(props) {
                         Good Neighbors
                     </Typography>
                     {
+                        auth0Client.isAuthenticated() && props.user &&
+                        <Button>
+                        <Avatar src={props.user.picture} onClick={() => {props.history.push('/Profile')}}>
+                        </Avatar>
+                        </Button>
+                    }
+                    {
                         !auth0Client.isAuthenticated() &&
-                        <Button className={classes.button} color="inherit" onClick={auth0Client.signIn}>Login</Button>
+                        <Button className={classes.button} color="inherit" onClick={auth0Client.signIn}>
+                          Login
+                        </Button>
                     }
                     {
                         auth0Client.isAuthenticated() &&
-                        <div>
-                            <Button className={classes.button} color="inherit" onClick={() => {signOut()}}>Logout</Button>
-                        </div>
+                        <Button className={classes.button} color="inherit" onClick={() => {signOut()}}>
+                          Logout
+                        </Button>
                     }
                 </Toolbar>
             </AppBar>

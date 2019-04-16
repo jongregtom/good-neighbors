@@ -5,6 +5,7 @@ import Callback from './Callback';
 import NavBar from './Components/NavBar';
 import Home from './Components/Home';
 import CreateRequest from './Components/CreateRequest';
+import Profile from './Components/Profile';
 
 class App extends Component {
   constructor(props) {
@@ -17,14 +18,6 @@ class App extends Component {
     //this.signIn = this.signIn.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.addUser = this.addUser.bind(this);
-  }
-
-  componentWillMount() {
-  }
-
-  componentDidMount() {
-
-      //placesAutoComplete('.request-location-input').on('change', e => this.setState({locationResult: e.suggestion.value}))
   }
 
   componentDidUpdate() {
@@ -75,7 +68,7 @@ class App extends Component {
     return (
       <div>
        
-        <NavBar />
+        <NavBar user={this.state.user}/>
 
         <Switch>
           <Route exact path='/' component={Home} />
@@ -83,6 +76,10 @@ class App extends Component {
           <Route 
             path='/CreateRequest'  
             render={props => <CreateRequest {...props} locationResult={this.state.locationResult} addRequest={this.addRequest} value={this.state.value} handleChange={this.handleChange}  user={this.state.user} />} 
+          />
+          <Route 
+            path='/Profile'
+            render={props => <Profile {...props} user={this.state.user} />}
           />
         </Switch>
       </div>
